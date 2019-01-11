@@ -1,23 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <b-head></b-head>
     <router-view/>
   </div>
 </template>
 
 <script>
+import BHead from './components/Head'
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      aa: ''
+    }
+  },
+  components: {
+    BHead
+  }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang='less'>
+@import url('./assets/css/reset');
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f2f2f2;
 }
 </style>
