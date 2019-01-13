@@ -11,6 +11,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 
 // 全局注册
 // import with ES6
+// markdown相关
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 // use

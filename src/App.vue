@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <b-head></b-head>
-    <router-view/>
+    <div class="head">
+      <b-head class="b-head"></b-head>
+    </div>
+    <main>
+      <router-view/>
+    </main>
   </div>
 </template>
 
@@ -22,10 +26,27 @@ export default {
 
 <style lang='less'>
 @import url('./assets/css/reset');
+@import url('./assets/css/common');
 html, body, #app {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   background: #f2f2f2;
+  width: 100%;
+}
+.head {
+  position: fixed;
+  height: 60px;
+  width: 100%;
+  background: #fff;
+  z-index: 1000;
+  .b-head {
+    height: 60px;
+  }
+}
+main {
+  max-width: 960px;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 70px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 </style>
