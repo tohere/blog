@@ -42,7 +42,7 @@ export default new Router({
       },
       children: [
         {
-          path: 'home',
+          path: '',
           name: 'adminHome',
           component: AdminHome,
           meta: {

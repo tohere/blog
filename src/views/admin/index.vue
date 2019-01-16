@@ -4,17 +4,17 @@
     <el-row class="menu-box" type="flex">
       <el-col>
         <el-menu
-          default-active="2"
+          default-active="/admin"
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
           router
         >
-          <el-menu-item class="my" index="/admin/home">
+          <el-menu-item class="my" index="/admin">
             <img src="https://ps.ssl.qhimg.com/sdmt/135_135_100/t0179bb161a3e622abd.png" alt="">
           </el-menu-item>
-          <el-menu-item index="/admin/home">
+          <el-menu-item index="/admin">
             <b>&nbsp;🏠&nbsp;&nbsp;</b>
             <span slot="title">个人主页</span>
           </el-menu-item>
