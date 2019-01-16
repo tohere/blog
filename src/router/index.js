@@ -7,6 +7,11 @@ const Main = () => import('../views/main')
 // 文章详情页
 const Article = () => import('../views/article')
 
+const Admin = () => import('../views/admin')
+const AdminHome = () => import('../views/admin/home')
+const Edit = () => import('../views/admin/edit')
+const BManage = () => import('../views/admin/manage') // 此处不能用manage命名，可能和系统的关键字重了...
+
 Vue.use(Router)
 
 export default new Router({
@@ -25,6 +30,40 @@ export default new Router({
         {
           path: '/article/:id',
           component: Article
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+      meta: {
+        admin: true
+      },
+      children: [
+        {
+          path: 'home',
+          name: 'adminHome',
+          component: AdminHome,
+          meta: {
+            admin: true
+          }
+        },
+        {
+          path: 'edit',
+          name: 'edit',
+          component: Edit,
+          meta: {
+            admin: true
+          }
+        },
+        {
+          path: 'manage',
+          name: 'manage',
+          component: BManage,
+          meta: {
+            admin: true
+          }
         }
       ]
     },

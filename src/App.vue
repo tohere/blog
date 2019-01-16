@@ -1,11 +1,16 @@
 <template>
   <div id="app">
-    <div class="head">
-      <b-head class="b-head"></b-head>
+    <div v-if="!$route.meta.admin">
+      <div class="head">
+        <b-head class="b-head"></b-head>
+      </div>
+      <main>
+        <router-view/>
+      </main>
     </div>
-    <main>
-      <router-view/>
-    </main>
+    <div v-else class="admin-view">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -30,6 +35,7 @@ export default {
 html, body, #app {
   background: #f2f2f2;
   width: 100%;
+  height: 100%;
 }
 .head {
   position: fixed;
@@ -48,5 +54,10 @@ main {
   padding-top: 70px;
   box-sizing: border-box;
   overflow: auto;
+}
+.admin-view {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>
