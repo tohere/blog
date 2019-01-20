@@ -10,32 +10,28 @@
             网站标题
           </div>
         </el-col>
-        <el-col class="hidden-sm-and-down" :md="17" >
-          <el-menu active-text-color='#007fff' mode="horizontal">
-            <el-menu-item index="0">首页</el-menu-item>
-            <el-menu-item index="1">HTML</el-menu-item>
-            <el-menu-item index="2">CSS</el-menu-item>
-            <el-menu-item index="3">JavaScript</el-menu-item>
-            <el-menu-item index="4">Vue</el-menu-item>
-            <el-menu-item index="5">NodeJs</el-menu-item>
+        <el-col class="hidden-sm-and-down" :md="20" >
+          <el-menu active-text-color='#007fff' mode="horizontal" router default-active="/" @select='changeCate'>
+            <el-menu-item index="/">首页</el-menu-item>
+            <el-menu-item  v-for="item in classifies" :key="item._id" :index="item.classify">{{ item.classify }}</el-menu-item>
           </el-menu>
         </el-col>
-        <el-col class="hidden-sm-and-down fa-btn" :md="3">
+        <!-- <el-col class="hidden-sm-and-down fa-btn" :md="3">
           <el-button>发布文章</el-button>
-        </el-col>
+        </el-col> -->
         <!-- <el-col class="hidden-sm-and-down" :md="7">
           <el-input size="medium" placeholder="请输入搜索内容" v-model="searchTxt">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col> -->
         <el-col :xs="2" :sm="2" class="login">
-          <div class="login-box">
+          <div class="login-box" v-if="false">
             <el-button>登录</el-button>
-            <el-button>注册</el-button>
+            <!-- <el-button>注册</el-button> -->
           </div>
-          <router-link v-if="false" to='/' class="has-login">
-            <span class="ellipsis">昵称昵称昵称昵称昵称昵称</span>
-            <img src="http://img5.imgtn.bdimg.com/it/u=865854342,1000008731&fm=26&gp=0.jpg" alt="">
+          <router-link v-if="true" to='/' class="has-login">
+            <!-- <span class="ellipsis">昵称昵称昵称昵称昵称昵称</span> -->
+            <img src="https://p.ssl.qhmsg.com/dmsmfl/120_115_/t01464dbaaa2a201a6b.webp?size=590x442" alt="">
           </router-link>
         </el-col>
         <el-col class="hidden-md-and-up" :span="2">
@@ -44,12 +40,7 @@
               <img src="../assets/menu.png" class="el-icon--right" alt>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>首页</el-dropdown-item>
-              <el-dropdown-item>HTML</el-dropdown-item>
-              <el-dropdown-item>CSS</el-dropdown-item>
-              <el-dropdown-item>JavaScript</el-dropdown-item>
-              <el-dropdown-item>Vue</el-dropdown-item>
-              <el-dropdown-item>NodeJs</el-dropdown-item>
+              <el-dropdown-item v-for="item in classifies" :key="item._id">{{ item.classify }}</el-dropdown-item>
               <div class="down-search">
                 <el-button>发布文章</el-button>
               </div>
@@ -62,12 +53,28 @@
 </template>
 <script>
 export default {
-  data () {
-    return {
-      searchTxt: '' // 搜索内容
+  props: {
+    classifies: {
+      type: Array,
+      required: true
     }
   },
-  methods: {}
+  data () {
+    return {
+      // searchTxt: '' // 搜索内容
+    }
+  },
+  methods: {
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-20 21:58:18
+     * @Desc: 点击分类切换主题部分内容
+     */
+    changeCate (cate) {
+      // eslint-disable-next-line
+      eventBus.$emit('getArticlesByClass', cate)
+    }
+  }
 }
 </script>
 <style lang='less' scoped>
@@ -103,7 +110,7 @@ nav {
   border-bottom-color: transparent;
 }
 .login {
-  min-width: 175px;
+  min-width: 100px;
   .has-login {
     display: flex;
     justify-content: center;

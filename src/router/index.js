@@ -11,6 +11,7 @@ const Admin = () => import('../views/admin')
 const AdminHome = () => import('../views/admin/home')
 const Edit = () => import('../views/admin/edit')
 const BManage = () => import('../views/admin/manage') // 此处不能用manage命名，可能和系统的关键字重了...
+const ClassManage = () => import('../views/admin/classManage')
 
 Vue.use(Router)
 
@@ -23,12 +24,18 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '',
+          path: '/',
+          name: 'main',
+          component: Main
+        },
+        {
+          path: '/:classify',
           name: 'main',
           component: Main
         },
         {
           path: '/article/:id',
+          name: 'article',
           component: Article
         }
       ]
@@ -42,7 +49,7 @@ export default new Router({
       },
       children: [
         {
-          path: '',
+          path: 'home',
           name: 'adminHome',
           component: AdminHome,
           meta: {
@@ -61,6 +68,14 @@ export default new Router({
           path: 'manage',
           name: 'manage',
           component: BManage,
+          meta: {
+            admin: true
+          }
+        },
+        {
+          path: 'classmanage',
+          name: 'classmanage',
+          component: ClassManage,
           meta: {
             admin: true
           }

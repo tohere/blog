@@ -2,10 +2,10 @@
   <div id="app">
     <div v-if="!$route.meta.admin">
       <div class="head">
-        <b-head class="b-head"></b-head>
+        <b-head class="b-head" @changeTab='changeTab' :classifies='classifies'></b-head>
       </div>
       <main>
-        <router-view/>
+        <router-view />
       </main>
     </div>
     <div v-else class="admin-view">
@@ -16,15 +16,37 @@
 
 <script>
 import BHead from './components/Head'
+import { getCate, getArticlesByClassify } from '@/api/getData'
 export default {
   name: 'App',
   data () {
     return {
-      aa: ''
+      classifies: [] // 分类集合
     }
+  },
+  created () {
+    this.getClassify()
   },
   components: {
     BHead
+  },
+  methods: {
+    /**
+     * @Desc 获取分类列表
+     */
+    async getClassify () {
+      const { data: {classifies} } = await getCate()
+      this.classifies = classifies
+    },
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-20 21:59:19
+     * @Desc: 切换主体部分内容
+     */
+    async changeTab (cate) {
+      const { data: { articles } } = await getArticlesByClassify(cate)
+      this.articles = articles
+    }
   }
 }
 </script>

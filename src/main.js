@@ -3,18 +3,19 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import App from './App'
-import router from './router'
-
 // 引入ElementUI中的隐藏类
 import 'element-ui/lib/theme-chalk/display.css'
+import App from './App'
+import router from './router'
 
 // 全局注册
 // import with ES6
 // markdown相关
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-// use
+
+// 通过eventBus传递数据
+window.eventBus = new Vue()
 
 Vue.config.productionTip = false
 

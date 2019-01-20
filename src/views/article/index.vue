@@ -3,27 +3,40 @@
   <article class="article">
     <!-- 文章标题部分 -->
     <div class="title">
-      <h1>文章标题</h1>
-      <time>2019-01-01</time>
-      <span class="readNums">阅读数: 1000</span>
+      <h1>{{ article.title }}</h1>
+      <time>{{ article.pubTime }}</time>
+      <span class="readNums"><i class="el-icon-view"></i> {{ article.scan }}</span>
     </div>
     <!-- 文章主体 内容部分 -->
     <article class="content">
       <!-- markdown展示部分 -->
-      <mavon-editor v-model="val" codeStyle='vs2015' :subfield="false" defaultOpen="preview" :toolbarsFlag="false" :boxShadow="false"></mavon-editor>
+      <mavon-editor v-model="article.content" codeStyle='monokai-sublime' :subfield="false" defaultOpen="preview" :toolbarsFlag="false" :boxShadow="false"></mavon-editor>
     </article>
   </article>
 </template>
 <script>
+import { getOneArticle, addScan } from '@/api/getData'
+import { formatTime } from '@/utils/tool'
 export default {
   data () {
     return {
-      val: 'data'
+      article: {}
     }
+  },
+  created () {
+    this.getOneArticleData() // 获取某一篇文章数据
+    addScan(this.$route.params.id) // 增加浏览量
   },
   mounted () {
     // 动态设置页面
     document.title = document.getElementsByTagName('h1')[0].innerText || '我的博客'
+  },
+  methods: {
+    async getOneArticleData () {
+      const { data: { article } } = await getOneArticle(this.$route.params.id)
+      article.pubTime = formatTime(article.pubTime)
+      this.article = article
+    }
   }
 }
 </script>
@@ -43,6 +56,9 @@ time,
 .readNums {
   font-size: 15px;
   color: #888;
+}
+.readNums {
+  margin-left: 10px;
 }
 .title {
   border-bottom: 1px solid #ccc;

@@ -4,17 +4,17 @@
     <el-row class="menu-box" type="flex">
       <el-col>
         <el-menu
-          default-active="/admin"
+          default-active="/admin/home"
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
           router
         >
-          <el-menu-item class="my" index="/admin">
+          <el-menu-item class="my" index="/admin/home">
             <img src="https://ps.ssl.qhimg.com/sdmt/135_135_100/t0179bb161a3e622abd.png" alt="">
           </el-menu-item>
-          <el-menu-item index="/admin">
+          <el-menu-item index="/admin/home">
             <b>&nbsp;🏠&nbsp;&nbsp;</b>
             <span slot="title">个人主页</span>
           </el-menu-item>
@@ -23,8 +23,12 @@
             <span slot="title">发布文章</span>
           </el-menu-item>
           <el-menu-item index="/admin/manage">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-tickets"></i>
             <span slot="title">文章管理</span>
+          </el-menu-item>
+          <el-menu-item index="/admin/classmanage">
+            <i class="el-icon-menu"></i>
+            <span slot="title">分类管理</span>
           </el-menu-item>
         </el-menu>
       </el-col>
