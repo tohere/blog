@@ -1,15 +1,16 @@
 <template>
   <div class="b-manage">
-    <el-card class="box-card" v-for="item in 10" :key="item">
-      <h2 class="ellipsis">🏆 掘金年度征文 | 2018 与我的技术之路🏆 掘金年度征文 | 2018 与我的技术之路🏆 掘金年度征文 | 2018 与我的技术之路</h2>
-      <p
-        class="ellipsis"
-      >2018 已经过去，这一年，你又学习了什么新技术？踩过哪些坑？做了什么项目？2019 年又给自己定了什么目标？参与掘金技术征文活动，记录你的 2018，还有掘金周边、小册优惠码赠送哦。</p>
+    <el-input v-model="searchTxt" placeholder="请输入搜索内容"><el-button slot="append" icon="el-icon-search" @click="search"></el-button></el-input>
+    <el-card class="box-card" v-for="article in articles" :key="article._id">
+      <h2 class="ellipsis">{{ article.title }}</h2>
       <div class="others">
-        <div class="scans el-icon-view"> 245浏览</div>
+        <div class="scans el-icon-view">
+          <span> {{ article.scan }} 浏览 </span>
+          <span> {{ article.pubTime }}</span>
+        </div>
         <div class="edit">
           <a href="javascript:;" class="edit-article el-icon-edit-outline"> 编辑</a>
-          <a href="javascript:;" class="del-article el-icon-delete"> 删除</a>
+          <a href="javascript:;" @click.prevent="del(article._id)" class="del-article el-icon-delete"> 删除</a>
         </div>
       </div>
     </el-card>
@@ -17,7 +18,51 @@
 </template>
 
 <script>
-export default {}
+import { searchArticle, getArticles, delArticle } from '@/api/getData'
+import { formatTime } from '@/utils/tool'
+export default {
+  data () {
+    return {
+      articles: [], // 文章列表
+      searchTxt: '' // 搜索文本
+    }
+  },
+  created () {
+    this.getAllArticles()
+  },
+  methods: {
+    async getAllArticles () {
+      const { data: { articles } } = await getArticles()
+      articles.map(item => {
+        item.pubTime = formatTime(item.pubTime)
+      })
+      this.articles = articles
+    },
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-22 21:38:33
+     * @Desc: 通过关键字搜索文章
+     */
+    async search () {
+      const { data: { articles } } = await searchArticle(this.searchTxt)
+      this.articles = articles
+    },
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-22 21:58:10
+     * @Desc: 删除某一篇文章
+     */
+    async del (id) {
+      const {data} = await delArticle(id)
+      if (data.msg === 'delete fail') {
+        this.$message.error('删除失败!')
+      } else if (data.msg === 'delete success') {
+        this.$message.success('删除成功！')
+      }
+      this.getAllArticles()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -28,12 +73,20 @@ export default {}
   width: 100%;
   height: 100%;
   overflow: auto;
+  .el-input {
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
   .box-card {
     padding: 0 20px;
     box-sizing: border-box;
     line-height: 40px;
+    cursor: pointer;
     h2 {
       width: 100%;
+      &:hover{
+        text-decoration: underline;
+      }
     }
     .others {
       display: flex;

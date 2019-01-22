@@ -5,14 +5,13 @@
       <el-form :model="form">
         <el-form-item label="分类" :label-width="formLabelWidth">
           <el-select v-model="form.region" placeholder="请选择文章分类">
-            <el-option label="分类1" value=""></el-option>
-            <el-option label="分类2" value=""></el-option>
+            <el-option v-for="item in classifies" :label="item.classify" :value="item.classify" :key="item._id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
       </div>
     </el-dialog>
     <input type="text" placeholder="请输入文章标题" v-model="title">
@@ -22,6 +21,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { getCate, publishArticle } from '@/api/getData'
 export default {
   data () {
     return {
@@ -31,14 +31,15 @@ export default {
       form: {
         region: ''
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      classifies: [] // 文章分类
     }
   },
   methods: {
     /**
      * @Desc: 发表文章
      */
-    publish () {
+    async publish () {
       // 标题为空
       if (!this.title) {
         return this.$notify.error({
@@ -47,16 +48,34 @@ export default {
           offset: 100
         })
       }
+      const {data: {classifies}} = await getCate()
+      this.classifies = classifies
       this.dialogFormVisible = true
+    },
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-22 22:25:26
+     * @Desc: 确定发布文章
+     */
+    async confirm () {
+      if (this.form.region === '') {
+        return this.$message.error('请选择文章分类！')
+      }
+      const { data } = await publishArticle(this.title, this.val, this.form.region)
+      if (data.msg === 'publish fail') {
+        this.$message.error('发布失败!')
+      } else if (data.msg === 'publish success') {
+        this.$message.success('发布成功!')
+      }
+      this.dialogFormVisible = false
     },
     // 绑定@imgAdd event
     $imgAdd (pos, $file) {
       // 第一步.将图片上传到服务器.
       const formdata = new FormData()
       formdata.append('file', $file)
-      console.log($file)
       axios({
-        url: '/api/articles/uploadimg',
+        url: '/articles/uploadimg',
         method: 'post',
         data: formdata,
         headers: { 'Content-Type': 'multipart/form-data' }

@@ -43,12 +43,13 @@ export default {
       this.articles = articles
     },
     getArticles () {
-      const _this = this
       // eslint-disable-next-line
       eventBus.$on('getArticlesByClass', async (cate) => {
         const {data: {articles}} = await getArticlesByClassify(cate)
-        _this.articles = articles
-        console.log(articles)
+        articles.map(item => {
+          item.pubTime = formatTime(item.pubTime)
+        })
+        this.articles = articles
       })
     }
   }
