@@ -13,6 +13,13 @@
         </el-col>
       </router-link>
     </el-row>
+    <el-pagination
+      background
+      v-show="count > 10"
+      layout="prev, pager, next"
+      @current-change='pageChange'
+      :total="count">
+    </el-pagination>
   </el-card>
 </template>
 
@@ -22,35 +29,54 @@ import { formatTime } from '@/utils/tool'
 export default {
   data () {
     return {
-      articles: [] // 文章集合
+      articles: [], // 文章集合
+      page: 1,
+      count: 0,
+      cate: '' // 分类
     }
   },
   created () {
+    this.page = 1
     this.getArticleList()
     // 注意， evenBus.$emit是瞬时性的，因此使用 evenBus.$emit派发事件时，evenBus.$on要已经在监听了，就是evenBus.$on要比emit先执行，否则无法接收到事件。
     // 所以此处需要一开始就进行初始化
-    this.getArticles()
+    this.getArticlesData()
   },
   methods: {
     /**
      * @Desc 获取文章列表
      */
     async getArticleList () {
-      const { data: { articles } } = await getArticles()
+      const { data: { articles, count } } = await getArticles(this.page)
       articles.map(item => {
         item.pubTime = formatTime(item.pubTime)
       })
       this.articles = articles
+      this.count = count
+      console.log(count)
     },
-    getArticles () {
+    getArticlesData () {
       // eslint-disable-next-line
       eventBus.$on('getArticlesByClass', async (cate) => {
-        const {data: {articles}} = await getArticlesByClassify(cate)
+        this.cate = cate
+        this.page = 1
+        const {data: {articles, count}} = await getArticlesByClassify(cate, this.page)
         articles.map(item => {
           item.pubTime = formatTime(item.pubTime)
         })
         this.articles = articles
+        this.count = count
+        console.log(articles)
       })
+    },
+    /**
+     * @Author: tomorrow-here
+     * @Date: 2019-01-23 23:11:11
+     * @Desc: 分页改变时触发
+     */
+    async pageChange (index) {
+      const { data: { articles } } = await getArticlesByClassify(this.cate, index)
+      this.articles = articles
     }
   }
 }
@@ -84,7 +110,7 @@ export default {
   h2 {
     font-size: 18px;
     font-weight: 600;
-    line-height: 60px;
+    line-height: 56px;
     &:hover {
       text-decoration: underline;
     }
@@ -97,5 +123,8 @@ time,
 }
 .readNums {
   margin-left: 10px;
+}
+.el-pagination {
+  margin-top: 20px;
 }
 </style>
