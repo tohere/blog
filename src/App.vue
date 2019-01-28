@@ -70,12 +70,14 @@ html, body, #app {
   }
 }
 main {
-  max-width: 960px;
+  max-width: 1170px;
   height: 100%;
   margin: 0 auto;
   padding-top: 70px;
   box-sizing: border-box;
   overflow: auto;
+  position: relative;
+  z-index: 10;
 }
 .admin-view {
   width: 100%;

@@ -2,7 +2,7 @@
   <div class="b-manage">
     <el-input v-model="searchTxt" placeholder="请输入搜索内容"><el-button slot="append" icon="el-icon-search" @click="search"></el-button></el-input>
     <el-card class="box-card" v-for="article in articles" :key="article._id">
-      <h2 class="ellipsis">{{ article.title }}</h2>
+      <router-link tag="h2" :to="{ path: '/article/' + article._id }" class="ellipsis">{{ article.title }}</router-link>
       <div class="others">
         <div class="scans el-icon-view">
           <span> {{ article.scan }} 浏览 </span>
@@ -17,19 +17,21 @@
     <el-pagination
       background
       layout="prev, pager, next"
-      :total="1000">
+      @current-change='pageChange'
+      :total="count">
     </el-pagination>
   </div>
 </template>
 
 <script>
-import { searchArticle, getArticles, delArticle } from '@/api/getData'
+import { searchArticle, getArticlesByClassify, delArticle } from '@/api/getData'
 import { formatTime } from '@/utils/tool'
 export default {
   data () {
     return {
       articles: [], // 文章列表
-      searchTxt: '' // 搜索文本
+      searchTxt: '', // 搜索文本
+      count: 0 // 文章总数
     }
   },
   created () {
@@ -37,10 +39,11 @@ export default {
   },
   methods: {
     async getAllArticles () {
-      const { data: { articles } } = await getArticles()
+      const { data: { articles, count } } = await getArticlesByClassify('/')
       articles.map(item => {
         item.pubTime = formatTime(item.pubTime)
       })
+      this.count = count
       this.articles = articles
     },
     /**
@@ -65,6 +68,13 @@ export default {
         this.$message.success('删除成功！')
       }
       this.getAllArticles()
+    },
+    /**
+     * @Desc 页码改变时触发
+     */
+    async pageChange (index) {
+      const { data: { articles } } = await getArticlesByClassify('/', index)
+      this.articles = articles
     }
   }
 }
@@ -85,10 +95,10 @@ export default {
   .box-card {
     padding: 0 20px;
     box-sizing: border-box;
-    line-height: 40px;
     cursor: pointer;
     h2 {
       width: 100%;
+      line-height: 40px;
       &:hover{
         text-decoration: underline;
       }
@@ -97,11 +107,14 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      line-height: 40px;
+      line-height: 30px;
       a:hover {
         color: #f00;
       }
     }
   }
+}
+.el-pagination {
+  margin: 10px 0;
 }
 </style>

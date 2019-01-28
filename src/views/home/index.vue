@@ -1,12 +1,12 @@
 <template>
   <!-- 页面：首页 -->
   <el-row type="flex" justify="space-between">
-    <el-col :xs="24" :md="17" class="main">
+    <el-col :xs="24" :md="24" class="main">
       <router-view></router-view>
     </el-col>
-    <el-col :md="6" class="hidden-sm-and-down aside">
+    <!-- <el-col :md="6" class="hidden-sm-and-down aside">
       <b-aside></b-aside>
-    </el-col>
+    </el-col> -->
   </el-row>
 </template>
 

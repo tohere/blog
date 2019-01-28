@@ -1,6 +1,6 @@
 <template>
   <!-- 页面：主题内容部分 -->
-  <el-card class="box-card">
+  <el-card class="box-card" v-loading="loading">
     <el-row type="flex" justify="space-between" align="middle" v-for="article in articles" :key="article._id">
       <router-link tag="div" :to="{ path: '/article/' + article._id }" style="width: 100%">
         <el-col :span="18">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getArticles, getArticlesByClassify } from '@/api/getData'
+import { getArticlesByClassify } from '@/api/getData'
 import { formatTime } from '@/utils/tool'
 export default {
   data () {
@@ -32,42 +32,23 @@ export default {
       articles: [], // 文章集合
       page: 1,
       count: 0,
-      cate: '' // 分类
+      cate: '', // 分类
+      loading: true
     }
   },
   created () {
-    this.page = 1
-    this.getArticleList()
-    // 注意， evenBus.$emit是瞬时性的，因此使用 evenBus.$emit派发事件时，evenBus.$on要已经在监听了，就是evenBus.$on要比emit先执行，否则无法接收到事件。
-    // 所以此处需要一开始就进行初始化
-    this.getArticlesData()
+    this.loading = true
   },
   methods: {
-    /**
-     * @Desc 获取文章列表
-     */
-    async getArticleList () {
-      const { data: { articles, count } } = await getArticles(this.page)
+    async getArticlesData (cate) {
+      this.loading = true
+      const {data: {articles, count}} = await getArticlesByClassify(cate, this.page)
       articles.map(item => {
         item.pubTime = formatTime(item.pubTime)
       })
       this.articles = articles
       this.count = count
-      console.log(count)
-    },
-    getArticlesData () {
-      // eslint-disable-next-line
-      eventBus.$on('getArticlesByClass', async (cate) => {
-        this.cate = cate
-        this.page = 1
-        const {data: {articles, count}} = await getArticlesByClassify(cate, this.page)
-        articles.map(item => {
-          item.pubTime = formatTime(item.pubTime)
-        })
-        this.articles = articles
-        this.count = count
-        console.log(articles)
-      })
+      this.loading = false
     },
     /**
      * @Author: tomorrow-here
@@ -75,8 +56,24 @@ export default {
      * @Desc: 分页改变时触发
      */
     async pageChange (index) {
+      this.loading = true
       const { data: { articles } } = await getArticlesByClassify(this.cate, index)
       this.articles = articles
+      this.loading = false
+    }
+  },
+  watch: {
+    $route: {
+      handler () {
+        console.log(this.$route.fullPath.split('/')[1]) // 刚加载页面，路由监听就会触发，这样可以不用eventBus去触发事件，eventBus有个bug就是会多次触发，虽说可以消除这个问题，但是又会随之产生其他问题
+        if (this.$route.name === 'main') {
+          this.page = 1
+          const cate = this.$route.fullPath.split('/')[1]
+          this.getArticlesData(cate)
+        }
+      },
+      deep: true,
+      immediate: true
     }
   }
 }

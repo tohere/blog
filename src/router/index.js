@@ -12,10 +12,11 @@ const AdminHome = () => import('../views/admin/home')
 const Edit = () => import('../views/admin/edit')
 const BManage = () => import('../views/admin/manage') // 此处不能用manage命名，可能和系统的关键字重了...
 const ClassManage = () => import('../views/admin/classManage')
+const Login = () => import('../views/admin/login')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -39,6 +40,14 @@ export default new Router({
           component: Article
         }
       ]
+    },
+    {
+      path: '/admin/login',
+      name: 'login',
+      component: Login,
+      meta: {
+        admin: true
+      }
     },
     {
       path: '/admin',
@@ -88,3 +97,33 @@ export default new Router({
     }
   ]
 })
+
+// 设置路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.name === 'login') {
+    // 如果是跳转去login页，直接下一步
+    next()
+  } else {
+    // 如果不是跳转到login
+    // 跳转前判断是否需要登录以及是否已经登录, 这里设置的是meta中带admin的都需要登录
+    // 遍历路由元信息，查看是否有admin，如果有admin，检查是否有token
+    if (to.matched.some(record => record.meta.admin)) {
+      // 有admin字段，判断是否有token
+      if (localStorage.getItem('token')) {
+        // 有token，直接往下执行
+        next()
+      } else {
+        // 没有token，跳转到登录页
+        next({
+          name: 'login',
+          query: { redirect: to.fullPath } // 记录要去的页面，登录成功后直接跳转
+        })
+      }
+    } else {
+      // 没有admin字段，直接往下执行
+      next()
+    }
+  }
+})
+
+export default router

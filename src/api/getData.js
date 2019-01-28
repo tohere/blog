@@ -1,18 +1,12 @@
-import axios from 'axios'
-axios.defaults.baseURL = '/api'
+import axios from '../axios'
+// axios.defaults.baseURL = '/api'
 
 /* ************************ 前台展示页面开始 ******************************/
 
 /**
  * @Desc 获取分类数据
  */
-export const getCate = (page) => axios.get('/classifies')
-
-/**
- * @Desc 获取文章数据列表
- * @param {Number} page 当前页码
- */
-export const getArticles = (page) => axios.get('/articles?page=' + page)
+export const getCate = () => axios.get('/classifies')
 
 /**
  * @Desc 获取某一篇文章的内容
@@ -29,6 +23,13 @@ export const addScan = (id) => axios.get(`/articles/addscan?id=${id}`)
 /* ************************ 前台展示页面结束 ******************************/
 
 /* ************************ 后台展示页面开始 ******************************/
+
+/**
+ * @Desc 登录
+ * @param {String} username 用户名
+ * @param {String} password 密码
+ */
+export const login = (username, password) => axios.post('/users/login', { username, password })
 
 /**
  * @Desc 获取文章发布内容，并保存到数据库

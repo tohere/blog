@@ -11,9 +11,9 @@
           </div>
         </el-col>
         <el-col class="hidden-sm-and-down" :md="20" >
-          <el-menu active-text-color='#007fff' mode="horizontal" router default-active="/" @select='changeCate'>
+          <el-menu active-text-color='#007fff' mode="horizontal" router default-active="/">
             <el-menu-item index="/">首页</el-menu-item>
-            <el-menu-item  v-for="item in classifies" :key="item._id" :index="item.classify">{{ item.classify }}</el-menu-item>
+            <el-menu-item  v-for="item in classifies" :key="item._id" :index="'/' + item.classify">{{ item.classify }}</el-menu-item>
           </el-menu>
         </el-col>
         <!-- <el-col class="hidden-sm-and-down fa-btn" :md="3">
@@ -29,10 +29,10 @@
             <el-button>登录</el-button>
             <!-- <el-button>注册</el-button> -->
           </div>
-          <router-link v-if="true" to='/' class="has-login">
+          <div v-if="true" class="has-login">
             <!-- <span class="ellipsis">昵称昵称昵称昵称昵称昵称</span> -->
             <img src="https://p.ssl.qhmsg.com/dmsmfl/120_115_/t01464dbaaa2a201a6b.webp?size=590x442" alt="">
-          </router-link>
+          </div>
         </el-col>
         <el-col class="hidden-md-and-up" :span="2">
           <el-dropdown trigger="click">
@@ -41,9 +41,9 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="item in classifies" :key="item._id">{{ item.classify }}</el-dropdown-item>
-              <div class="down-search">
+              <!-- <div class="down-search">
                 <el-button>发布文章</el-button>
-              </div>
+              </div> -->
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -71,6 +71,8 @@ export default {
      * @Desc: 点击分类切换主题部分内容
      */
     changeCate (cate) {
+      cate = cate.split('/')[1]
+      console.log(cate)
       // eslint-disable-next-line
       eventBus.$emit('getArticlesByClass', cate)
     }
@@ -79,7 +81,7 @@ export default {
 </script>
 <style lang='less' scoped>
 nav {
-  max-width: 960px;
+  max-width: 1170px;
   margin: 0 auto;
 }
 .el-menu.el-menu--horizontal {

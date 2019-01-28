@@ -1,6 +1,6 @@
 <template>
   <!-- 页面：文章详情部分 -->
-  <article class="article">
+  <article class="article" v-loading='loading'>
     <!-- 文章标题部分 -->
     <div class="title">
       <h1>{{ article.title }}</h1>
@@ -20,22 +20,24 @@ import { formatTime } from '@/utils/tool'
 export default {
   data () {
     return {
-      article: {}
+      article: {},
+      loading: true
     }
   },
   created () {
+    this.loading = true
     this.getOneArticleData() // 获取某一篇文章数据
     addScan(this.$route.params.id) // 增加浏览量
   },
   mounted () {
-    // 动态设置页面
-    document.title = document.getElementsByTagName('h1')[0].innerText || '我的博客'
   },
   methods: {
     async getOneArticleData () {
       const { data: { article } } = await getOneArticle(this.$route.params.id)
       article.pubTime = formatTime(article.pubTime)
+      document.title = article.title || '我的博客'
       this.article = article
+      this.loading = false
     }
   }
 }
