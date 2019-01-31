@@ -65,7 +65,7 @@ export default {
   watch: {
     $route: {
       handler () {
-        console.log(this.$route.fullPath.split('/')[1]) // 刚加载页面，路由监听就会触发，这样可以不用eventBus去触发事件，eventBus有个bug就是会多次触发，虽说可以消除这个问题，但是又会随之产生其他问题
+        // 刚加载页面，路由监听就会触发，这样可以不用eventBus去触发事件，eventBus有个bug就是会多次触发，虽说可以消除这个问题，但是又会随之产生其他问题
         if (this.$route.name === 'main') {
           this.page = 1
           const cate = this.$route.fullPath.split('/')[1]

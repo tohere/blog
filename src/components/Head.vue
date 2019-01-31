@@ -11,7 +11,7 @@
           </div>
         </el-col>
         <el-col class="hidden-sm-and-down" :md="20" >
-          <el-menu active-text-color='#007fff' mode="horizontal" router default-active="/">
+          <el-menu active-text-color='#007fff' mode="horizontal" router :default-active="'/' + defaultRouter">
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item  v-for="item in classifies" :key="item._id" :index="'/' + item.classify">{{ item.classify }}</el-menu-item>
           </el-menu>
@@ -31,7 +31,7 @@
           </div>
           <router-link to='/admin/home' v-if="true" class="has-login">
             <!-- <span class="ellipsis">昵称昵称昵称昵称昵称昵称</span> -->
-            <img src="https://p.ssl.qhmsg.com/dmsmfl/120_115_/t01464dbaaa2a201a6b.webp?size=590x442" alt="">
+            <img src="/static/avatar.jpg" alt="">
           </router-link>
         </el-col>
         <el-col class="hidden-md-and-up" :span="2">
@@ -62,6 +62,7 @@ export default {
   data () {
     return {
       // searchTxt: '' // 搜索内容
+      defaultRouter: '/'
     }
   },
   methods: {
@@ -75,6 +76,12 @@ export default {
       console.log(cate)
       // eslint-disable-next-line
       eventBus.$emit('getArticlesByClass', cate)
+    }
+  },
+  watch: {
+    $route () {
+      // 解决刷新页面路由不变页面重定向到首页的问题
+      this.defaultRouter = this.$route.fullPath.split('/')[1]
     }
   }
 }
