@@ -29,10 +29,10 @@
             <el-button>登录</el-button>
             <!-- <el-button>注册</el-button> -->
           </div>
-          <div v-if="true" class="has-login">
+          <router-link to='/admin/home' v-if="true" class="has-login">
             <!-- <span class="ellipsis">昵称昵称昵称昵称昵称昵称</span> -->
             <img src="https://p.ssl.qhmsg.com/dmsmfl/120_115_/t01464dbaaa2a201a6b.webp?size=590x442" alt="">
-          </div>
+          </router-link>
         </el-col>
         <el-col class="hidden-md-and-up" :span="2">
           <el-dropdown trigger="click">
