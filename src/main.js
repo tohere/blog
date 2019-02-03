@@ -8,6 +8,10 @@ import 'element-ui/lib/theme-chalk/display.css'
 import App from './App'
 import router from './router'
 
+// 解决ie11不能兼容问题
+/* eslint-disable-next-line */
+import "babel-polyfill"
+
 // 全局注册
 // import with ES6
 // markdown相关

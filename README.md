@@ -24,3 +24,17 @@ axios.delete('/api', { data: { id: id } })
 - element-ui中input框的键盘事件失效
 > 处理方法：通过在后面加上.native修饰符，监听组件根元素的事件
 > 参考：https://blog.csdn.net/k152_8747/article/details/79580797
+
+## 对ie10、11的兼容处理
+- 安装babel-polyfill
+```shell
+$ npm i -D babel-polyfill
+```
+- 将webpack-dev-server版本降级到2.7.1
+```shell
+$ npm i -D webpack-dev-server@2.7.1
+```
+- 在main.js中引入babel-polyfill
+```javascript
+import 'babel-polyfill'
+```

@@ -1,7 +1,7 @@
 <template>
   <div class="b-manage">
     <el-input v-model="searchTxt" placeholder="请输入搜索内容"><el-button slot="append" icon="el-icon-search" @click="search"></el-button></el-input>
-    <el-card class="box-card" v-for="article in articles" :key="article._id">
+    <div class="box-card" v-for="article in articles" :key="article._id">
       <router-link tag="h2" :to="{ path: '/article/' + article._id }" class="ellipsis">{{ article.title }}</router-link>
       <div class="others">
         <div class="scans el-icon-view">
@@ -13,7 +13,7 @@
           <a href="javascript:;" @click.prevent="del(article._id)" class="del-article el-icon-delete"> 删除</a>
         </div>
       </div>
-    </el-card>
+    </div>
     <el-pagination
       background
       layout="prev, pager, next"
