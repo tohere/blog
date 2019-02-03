@@ -37,4 +37,4 @@ $ npm i -D webpack-dev-server@2.7.1
 - 在main.js中引入babel-polyfill
 ```javascript
 import 'babel-polyfill'
-```
+```ie
