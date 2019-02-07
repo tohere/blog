@@ -1,5 +1,5 @@
 import axios from '../axios'
-// axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = '/api'
 
 /* ************************ 前台展示页面开始 ******************************/
 

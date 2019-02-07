@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api': {  //使用"/api"来代替"http://f.apiplus.c" 
-      //   target: 'http://localhost:3000', //源地址 
-      //   changeOrigin: true, //改变源 
-      //   pathRewrite: {
-      //     '^/api': '' //路径重写 
-      //   }
-      // } 
+      '/api': {  //使用"/api"来代替"http://f.apiplus.c" 
+        target: 'localhost:3000', //源地址 
+        changeOrigin: true, //改变源 
+        pathRewrite: {
+          '^/api': '' //路径重写 
+        }
+      } 
     },
 
     // Various Dev Server settings
@@ -64,7 +64,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
